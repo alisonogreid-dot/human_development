@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ideal Societies — Week 1: Measuring Human Development</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDFAF6;
+      --text: #1A1A1A;
+      --accent-orange: #E8451C;
+      --accent-pink: #E91E90;
+      --accent-yellow: #F5C518;
+      --accent-terra: #C4572A;
+      --accent-olive: #6B7D3A;
+      --surface: #FFFFFF;
+      --border: #E8E0D8;
+      --muted: #8C7E72;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Source Sans 3', 'Nunito Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Gradient bar */
+    .gradient-bar {
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent-pink), var(--accent-orange), var(--accent-yellow));
+    }
+
+    /* Header */
+    .header {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 1.5rem;
+    }
+    .header-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+    .header h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0.3rem 0 0.5rem;
+      color: var(--text);
+    }
+    .header .inquiry {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--accent-orange);
+      font-style: italic;
+    }
+    .header .instructions {
+      margin-top: 0.8rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    /* Main navigation tabs */
+    .main-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .main-tab {
+      padding: 0.8rem 1.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .main-tab:hover { color: var(--accent-orange); }
+    .main-tab.active {
+      color: var(--accent-orange);
+      border-bottom-color: var(--accent-orange);
+    }
+    .main-tab:focus-visible {
+      outline: 2px solid var(--accent-orange);
+      outline-offset: 2px;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .card h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+    .card h3 {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Accordion / expandable vocab items */
+    .vocab-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .vocab-item:hover { border-color: var(--accent-orange); }
+    .vocab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      background: var(--surface);
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 1rem;
+    }
+    .vocab-header:focus-visible {
+      outline: 2px solid var(--accent-orange);
+      outline-offset: -2px;
+    }
+    .vocab-term {
+      font-weight: 700;
+      color: var(--text);
+    }
+    .vocab-category {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cat-economic { background: var(--accent-terra); }
+    .cat-social { background: var(--accent-olive); }
+    .cat-composite { background: var(--accent-pink); }
+    .cat-classification { background: var(--muted); }
+    .chevron {
+      transition: transform 0.25s;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-left: 0.5rem;
+      flex-shrink: 0;
+    }
+    .vocab-item.open .chevron { transform: rotate(180deg); }
+    .vocab-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .vocab-item.open .vocab-body {
+      max-height: 500px;
+    }
+    .vocab-content {
+      padding: 0 1rem 1rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .vocab-content .example {
+      margin-top: 0.5rem;
+      padding: 0.5rem 0.8rem;
+      background: #FFF8F0;
+      border-left: 3px solid var(--accent-yellow);
+      border-radius: 0 6px 6px 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Filter buttons */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .filter-btn {
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text);
+    }
+    .filter-btn:hover { border-color: var(--accent-orange); color: var(--accent-orange); }
+    .filter-btn.active {
+      background: var(--accent-orange);
+      color: white;
+      border-color: var(--accent-orange);
+    }
+    .filter-btn:focus-visible {
+      outline: 2px solid var(--accent-orange);
+      outline-offset: 2px;
+    }
+
+    /* Country report section */
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--accent-orange);
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-right: 0.6rem;
+      flex-shrink: 0;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1.2rem;
+    }
+    .step-content { flex: 1; }
+    .step-content p { margin-bottom: 0.3rem; }
+
+    /* Resource links */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 600px) {
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+    .resource-link {
+      display: block;
+      padding: 0.8rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .resource-link:hover {
+      border-color: var(--accent-orange);
+      color: var(--accent-orange);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .resource-link .resource-type {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    /* Success criteria checklist */
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+    }
+    .check-box {
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .check-box:hover { border-color: var(--accent-orange); }
+    .check-box.checked {
+      background: var(--accent-olive);
+      border-color: var(--accent-olive);
+    }
+    .check-box.checked::after {
+      content: '✓';
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Looking ahead teaser */
+    .teaser-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin-bottom: 0.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .teaser-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+    .teaser-card.t1::before { background: var(--accent-orange); }
+    .teaser-card.t2::before { background: var(--accent-pink); }
+    .teaser-card.t3::before { background: var(--accent-yellow); }
+    .teaser-card .teaser-week {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+    .teaser-card .teaser-q {
+      font-weight: 600;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .teaser-card .teaser-hint {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* HDI diagram section */
+    .hdi-diagram {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+    @media (max-width: 600px) {
+      .hdi-diagram { grid-template-columns: 1fr; }
+    }
+    .hdi-pillar {
+      text-align: center;
+      padding: 1.2rem 1rem;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .hdi-pillar:hover {
+      transform: translateY(-2px);
+    }
+    .hdi-pillar.p-health { border-color: var(--accent-olive); }
+    .hdi-pillar.p-knowledge { border-color: var(--accent-terra); }
+    .hdi-pillar.p-living { border-color: var(--accent-pink); }
+    .pillar-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .pillar-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+    .pillar-metric {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Combining arrow */
+    .hdi-combine {
+      text-align: center;
+      padding: 1rem 0;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-orange);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .hdi-combine .arrow { font-size: 1.5rem; display: block; margin-bottom: 0.3rem; }
+
+    .hdi-result {
+      text-align: center;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+      border-radius: 10px;
+      color: white;
+    }
+    .hdi-result .result-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .hdi-result .result-desc {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-top: 0.3rem;
+    }
+
+    /* Footer */
+    .footer {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem 1rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .main-tab {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+      }
+      .header h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="gradient-bar"></div>
+
+<div class="header">
+  <div class="header-label">Ideal Societies — Week 1</div>
+  <h1>Measuring Human Development</h1>
+  <div class="inquiry">What do people need to thrive?</div>
+  <p class="instructions">Use this page as your reference hub for today's lesson. Start with the key terms, then use the country report guide to build your group presentation.</p>
+</div>
+
+<div class="container">
+
+  <!-- Main tabs -->
+  <div class="main-tabs" role="tablist">
+    <button class="main-tab active" role="tab" aria-selected="true" data-tab="vocab" tabindex="0">Key Terms</button>
+    <button class="main-tab" role="tab" aria-selected="false" data-tab="report" tabindex="0">Country Report</button>
+    <button class="main-tab" role="tab" aria-selected="false" data-tab="ahead" tabindex="0">Looking Ahead</button>
+  </div>
+
+  <!-- TAB 1: KEY TERMS -->
+  <div class="tab-panel active" id="panel-vocab" role="tabpanel">
+
+    <!-- HDI Visual -->
+    <div class="card">
+      <h2>The Human Development Index (HDI)</h2>
+      <p style="margin-bottom:1rem;">The HDI combines three dimensions to give a fuller picture of how "developed" a country is — measured as a score between 0 and 1. It was created because GDP alone doesn't tell you how people are actually living.</p>
+
+      <div class="hdi-diagram">
+        <div class="hdi-pillar p-health">
+          <div class="pillar-icon">❤️</div>
+          <div class="pillar-title">Long & Healthy Life</div>
+          <div class="pillar-metric">Measured by: Life expectancy at birth</div>
+        </div>
+        <div class="hdi-pillar p-knowledge">
+          <div class="pillar-icon">📚</div>
+          <div class="pillar-title">Knowledge</div>
+          <div class="pillar-metric">Measured by: Average + expected years of schooling</div>
+        </div>
+        <div class="hdi-pillar p-living">
+          <div class="pillar-icon">🏠</div>
+          <div class="pillar-title">A Decent Standard of Living</div>
+          <div class="pillar-metric">Measured by: GNI per capita (PPP $)</div>
+        </div>
+      </div>
+
+      <div class="hdi-combine">
+        <span class="arrow">↓</span>
+        These three combine into…
+      </div>
+
+      <div class="hdi-result">
+        <div class="result-title">Human Development Index (HDI)</div>
+        <div class="result-desc">A score between 0 and 1 — the closer to 1, the higher the human development</div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="card">
+      <h2>Vocabulary</h2>
+      <p style="margin-bottom:1rem;">Click any term to expand its definition. Use the filters to focus on one category at a time.</p>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="economic">Economic</button>
+        <button class="filter-btn" data-filter="social">Social</button>
+        <button class="filter-btn" data-filter="composite">Composite</button>
+        <button class="filter-btn" data-filter="classification">Classification</button>
+      </div>
+
+      <div id="vocab-list">
+        <!-- Economic terms -->
+        <div class="vocab-item" data-category="economic">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Economic Factors</span> <span class="vocab-category cat-economic">Economic</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              Elements that make up the level of production in a country's economy — things like <strong>income</strong> and <strong>production</strong>.
+              <div class="example">💡 Think of these as the "money side" of development — how much a country earns and produces.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="economic">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Gross National Income (GNI)</span> <span class="vocab-category cat-economic">Economic</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              The total amount of money earned by a nation's people and businesses. It includes GDP (everything produced inside the country) plus income received from overseas.
+              <div class="example">💡 GNI is like a country's total salary — including money its citizens earn abroad.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="economic">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">GNI per capita</span> <span class="vocab-category cat-economic">Economic</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              GNI divided by the country's population. This gives a comparable wealth rate — how much, on average, each person "earns."
+              <div class="example">💡 Per capita = "per person." It makes it possible to compare a huge country like India to a small one like Norway.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="economic">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Purchasing Power Parity (PPP)</span> <span class="vocab-category cat-economic">Economic</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              An adjustment to GDP per capita that accounts for the fact that $1 buys more (or less) depending on where you are. It makes income comparisons fairer across countries.
+              <div class="example">💡 A coffee in Oslo might cost $6, but in Hanoi it might cost $1. PPP adjusts for that difference so we can compare incomes more accurately.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social terms -->
+        <div class="vocab-item" data-category="social">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Social Factors</span> <span class="vocab-category cat-social">Social</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              Elements that tell us about how people are doing socially — primarily <strong>health</strong> and <strong>education</strong>.
+              <div class="example">💡 Think of these as the "people side" of development — how long and how well people actually live.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="social">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Population Indicators</span> <span class="vocab-category cat-social">Social</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              Birth rates and death rates, especially tracked over time. These show us how healthy and safe a society is — and where it's heading demographically.
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="social">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Life Expectancy</span> <span class="vocab-category cat-social">Social</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              A metric that summarises death rates across all age groups in one year, to estimate how long people can expect to live. It's one of the HDI's three pillars — representing a "long and healthy life."
+              <div class="example">💡 Life expectancy doesn't predict how long <em>you</em> will live — it captures how safe and healthy a society is <em>right now</em>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="social">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Social Indicators</span> <span class="vocab-category cat-social">Social</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              Broader measures like life expectancy, infant mortality, and education rates. Together, these show how people's lives are shaped from birth to death.
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="social">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Education (Knowledge)</span> <span class="vocab-category cat-social">Social</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              The HDI measures two things for education: the <strong>average number of years of schooling</strong> adults have completed, and the <strong>expected years of schooling</strong> a child entering school can look forward to.
+            </div>
+          </div>
+        </div>
+
+        <!-- Composite terms -->
+        <div class="vocab-item" data-category="composite">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Human Development Index (HDI)</span> <span class="vocab-category cat-composite">Composite</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              A single number (between 0 and 1) that combines economic and social factors to give a fuller picture of how "developed" a country is. Created by the UNDP because GDP alone doesn't capture quality of life.
+              <div class="example">💡 Norway's HDI is ~0.96. Central African Republic's is ~0.40. But what do those numbers <em>hide</em>? That's a question we'll keep returning to.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="composite">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">Standard of Living</span> <span class="vocab-category cat-composite">Composite</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              In the HDI, "standard of living" is measured by GNI per capita — how much money, on average, a person earns in a year. It's a proxy for whether people can afford a decent life.
+              <div class="example">💡 Notice that HDI uses money (GNI) as a stand-in for "decent life." Is money the best way to measure that? Something to think about…</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Classification terms -->
+        <div class="vocab-item" data-category="classification">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">LEDC (Less Economically Developed Country)</span> <span class="vocab-category cat-classification">Classification</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              A country with lower average incomes, often lower rates of education, lower life expectancies, and an economy focused on raw materials and agriculture rather than finished products.
+              <div class="example">⚠️ Labels like LEDC are useful shortcuts, but they can flatten the complexity of a country's situation. Keep that tension in mind.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vocab-item" data-category="classification">
+          <button class="vocab-header" aria-expanded="false">
+            <span><span class="vocab-term">MEDC (More Economically Developed Country)</span> <span class="vocab-category cat-classification">Classification</span></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="vocab-body" aria-hidden="true">
+            <div class="vocab-content">
+              A country with higher average incomes, high rates of education and life expectancy. Typically produces finished products using raw materials imported from LEDCs.
+              <div class="example">⚠️ Norway is an MEDC — but does that mean everything here is "developed"? Are there communities or groups within MEDCs who experience LEDC-like conditions?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: COUNTRY REPORT -->
+  <div class="tab-panel" id="panel-report" role="tabpanel">
+
+    <div class="card">
+      <h2>Your Country Report</h2>
+      <p style="margin-bottom:0.5rem;">Work in your group to produce a country report (slides or an infographic) that helps answer the inquiry question: <strong><em>What does it mean to be a "developed" country?</em></strong></p>
+      <p style="margin-bottom:1.5rem; color: var(--muted); font-size:0.9rem;">You can use PowerPoint, Canva, or any format that lets you present data clearly. See the example on Greece for layout ideas.</p>
+
+      <div class="step">
+        <span class="step-number">1</span>
+        <div class="step-content">
+          <h3>Context & History</h3>
+          <p>Give a brief overview of your country's history of development and its situation within its region. What's the story?</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">2</span>
+        <div class="step-content">
+          <h3>Government & People</h3>
+          <p>What type of government does your country have? How much influence do ordinary people have in their government and daily lives?</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">3</span>
+        <div class="step-content">
+          <h3>The HDI Pillars</h3>
+          <p>Cover each of the three dimensions with data:</p>
+          <p style="margin-top:0.4rem;">❤️ <strong>Life Expectancy</strong> — include infant mortality or other health indicators if you have time</p>
+          <p>📚 <strong>Education</strong> — average and expected years of schooling</p>
+          <p>🏠 <strong>Standard of Living</strong> — GNI or GDP per capita</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">4</span>
+        <div class="step-content">
+          <h3>HDI Score & Your Analysis</h3>
+          <p>What is your country's HDI? Based on everything you've found — <strong>how likely would you want to live there?</strong> Use the data to support your reasoning.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strong vs Weak Example -->
+    <div class="card">
+      <h2>What Does a Strong Slide Look Like?</h2>
+      <p style="margin-bottom:1rem;">Click below to see the same section — HDI Pillars for Greece — done two ways. One just dumps data. The other connects the data to the inquiry question.</p>
+
+      <div class="vocab-item" data-category="example" style="border-color: #E8451C;">
+        <button class="vocab-header" aria-expanded="false" style="background: #FFF3F0;">
+          <span><span class="vocab-term">❌ Weak version</span> <span class="vocab-category" style="background: var(--accent-terra);">Surface level</span></span>
+          <span class="chevron">▾</span>
+        </button>
+        <div class="vocab-body" aria-hidden="true">
+          <div class="vocab-content">
+            <div style="background: #F9F3F0; border-radius: 8px; padding: 1rem; margin-bottom: 0.8rem; border: 1px solid #E8D8D0;">
+              <p style="font-weight: 700; margin-bottom: 0.5rem; font-size: 1rem;">Greece — HDI Pillars</p>
+              <p style="margin-bottom: 0.3rem;">Life expectancy: 80.1 years</p>
+              <p style="margin-bottom: 0.3rem;">Education: 10.5 average years of schooling</p>
+              <p style="margin-bottom: 0.3rem;">GNI per capita: $30,206</p>
+              <p>HDI: 0.887</p>
+            </div>
+            <p style="color: var(--accent-terra); font-weight: 600; font-size: 0.9rem;">Why this is weak:</p>
+            <p style="font-size: 0.9rem; color: var(--muted);">It's just a list of numbers with no explanation. The reader has no idea what these numbers <em>mean</em> for the people living there, or how they connect to the question "What does it mean to be developed?" You could copy-paste this for any country in 30 seconds — there's no thinking visible.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="vocab-item" data-category="example" style="border-color: var(--accent-olive);">
+        <button class="vocab-header" aria-expanded="false" style="background: #F4F7F0;">
+          <span><span class="vocab-term">✓ Strong version</span> <span class="vocab-category" style="background: var(--accent-olive);">Analysis visible</span></span>
+          <span class="chevron">▾</span>
+        </button>
+        <div class="vocab-body" aria-hidden="true">
+          <div class="vocab-content">
+            <div style="background: #F2F6EE; border-radius: 8px; padding: 1rem; margin-bottom: 0.8rem; border: 1px solid #D0DCC8;">
+              <p style="font-weight: 700; margin-bottom: 0.5rem; font-size: 1rem;">Greece — Health, Knowledge & Standard of Living</p>
+              <p style="margin-bottom: 0.5rem;">Greece's <strong>life expectancy of 80.1 years</strong> is above the European average, partly because of the Mediterranean diet and a strong public healthcare system. However, spending cuts during the 2010s debt crisis reduced hospital funding and increased wait times, showing that even high-HDI countries can see health outcomes slip when economic factors change.</p>
+              <p style="margin-bottom: 0.5rem;">In education, Greeks average <strong>10.5 years of schooling</strong>, but youth unemployment after graduation is among the highest in Europe — raising the question of whether years of education alone captures how "developed" a country's knowledge system really is.</p>
+              <p><strong>GNI per capita ($30,206)</strong> looks strong, but Greece's economic crisis showed how quickly a "developed" economy can contract. This suggests that HDI is a snapshot, not a guarantee.</p>
+            </div>
+            <p style="color: var(--accent-olive); font-weight: 600; font-size: 0.9rem;">Why this is strong:</p>
+            <p style="font-size: 0.9rem; color: var(--muted);">Same data, but every number is <em>explained</em> — what does it mean for real people? It also connects back to the inquiry question by asking whether HDI captures the full picture. The writer is showing their thinking, not just their research.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="card">
+      <h2>Suggested Resources</h2>
+      <p style="margin-bottom:0.8rem;">Start with these. You don't need to use all of them — find the ones that have the data you need for your specific country.</p>
+      <div class="resource-grid">
+        <a href="https://www.countryreports.org" target="_blank" rel="noopener" class="resource-link">
+          Countries of the World
+          <span class="resource-type">CountryReports — general overview</span>
+        </a>
+        <a href="https://www.undp.org" target="_blank" rel="noopener" class="resource-link">
+          UNDP
+          <span class="resource-type">United Nations Development Programme — HDI data</span>
+        </a>
+        <a href="https://www.imf.org/en/Countries" target="_blank" rel="noopener" class="resource-link">
+          IMF Country Info
+          <span class="resource-type">International Monetary Fund — economic data</span>
+        </a>
+        <a href="https://wisevoter.com/country-rankings/hdi-by-country/" target="_blank" rel="noopener" class="resource-link">
+          HDI by Country
+          <span class="resource-type">Rankings and comparative data</span>
+        </a>
+        <a href="https://ourworldindata.org" target="_blank" rel="noopener" class="resource-link">
+          Our World in Data
+          <span class="resource-type">Interactive charts on health, education, living standards</span>
+        </a>
+        <a href="https://data.worldbank.org" target="_blank" rel="noopener" class="resource-link">
+          World Bank Data
+          <span class="resource-type">GNI, GDP, population, education data</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Success Criteria -->
+    <div class="card">
+      <h2>Success Criteria</h2>
+      <p style="margin-bottom:1rem;">Check these off as you build your report. A strong report will cover all of them.</p>
+      <div class="checklist-item"><div class="check-box" tabindex="0" role="checkbox" aria-checked="false"></div><span>Includes context about the country's development history and regional situation</span></div>
+      <div class="checklist-item"><div class="check-box" tabindex="0" role="checkbox" aria-checked="false"></div><span>Describes the type of government and how much influence people have</span></div>
+      <div class="checklist-item"><div class="check-box" tabindex="0" role="checkbox" aria-checked="false"></div><span>Presents data on all three HDI pillars (health, education, standard of living)</span></div>
+      <div class="checklist-item"><div class="check-box" tabindex="0" role="checkbox" aria-checked="false"></div><span>States the country's HDI score</span></div>
+      <div class="checklist-item"><div class="check-box" tabindex="0" role="checkbox" aria-checked="false"></div><span>Includes a personal analysis: would you want to live there, and why?</span></div>
+      <div class="checklist-item"><div class="check-box" tabindex="0" role="checkbox" aria-checked="false"></div><span>Uses key terms from the vocabulary accurately (e.g., GNI, life expectancy, social factors)</span></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LOOKING AHEAD -->
+  <div class="tab-panel" id="panel-ahead" role="tabpanel">
+
+    <div class="card">
+      <h2>Where This Unit Is Going</h2>
+      <p style="margin-bottom:1rem;">This week you're learning how development is <em>measured</em>. Over the next few weeks, we'll explore what measurements <em>miss</em> — and what else matters when building a society people actually want to live in.</p>
+
+      <div class="teaser-card t1">
+        <div class="teaser-week">Week 2</div>
+        <div class="teaser-q">Can development be measured fairly?</div>
+        <div class="teaser-hint">You'll look at what HDI hides — inequalities within countries, and why averages can be misleading.</div>
+      </div>
+
+      <div class="teaser-card t2">
+        <div class="teaser-week">Week 3</div>
+        <div class="teaser-q">What makes a society fair?</div>
+        <div class="teaser-hint">Beyond economics — how do things like judicial independence and democratic participation affect people's lives?</div>
+      </div>
+
+      <div class="teaser-card t3">
+        <div class="teaser-week">Later in the unit</div>
+        <div class="teaser-q">Can a perfect society exist?</div>
+        <div class="teaser-hint">Utopias, trade-offs, and the factors you'll argue matter most in your summative research paper.</div>
+      </div>
+    </div>
+
+    <div class="card" style="background: #FFF8F0; border-color: var(--accent-yellow);">
+      <p style="font-size:0.95rem;">💡 <strong>Keep this in mind as you research today:</strong> the HDI gives you three factors (health, knowledge, standard of living). By the end of this unit, you'll have identified many more. Today's country report is your first chance to notice what the numbers <em>do</em> and <em>don't</em> tell you about a place.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="gradient-bar" style="margin-bottom:1rem;"></div>
+  <p>Ideal Societies — MYP3 Individuals & Societies</p>
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.main-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.main-tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+    tab.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tab.click(); }
+    });
+  });
+
+  // Accordion vocab items
+  document.querySelectorAll('.vocab-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.closest('.vocab-item');
+      const isOpen = item.classList.contains('open');
+      item.classList.toggle('open');
+      header.setAttribute('aria-expanded', !isOpen);
+      header.closest('.vocab-item').querySelector('.vocab-body').setAttribute('aria-hidden', isOpen);
+    });
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
+    });
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.vocab-item').forEach(item => {
+        if (filter === 'all' || item.dataset.category === filter) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Checklist
+  document.querySelectorAll('.check-box').forEach(box => {
+    function toggle() {
+      box.classList.toggle('checked');
+      box.setAttribute('aria-checked', box.classList.contains('checked'));
+    }
+    box.addEventListener('click', toggle);
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+</script>
+</body>
+</html>
